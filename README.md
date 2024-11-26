@@ -60,8 +60,43 @@ Hyperparameter tuning was performed using **Grid Search** for both the Random Fo
 
 ## Installation
 
-To run this project locally, clone this repository and install the dependencies using Poetry:
+To run this project locally, clone this repository and run it with Docker:
 
 ```bash
-poetry install
+docker build -t car-performance-api . 
+```
+
+Start the API by running the container:
+
+```bash
+docker run -p 9696:9696 car-performance-api
+```
+
+Then, make a post request passing car data to the route `http://localhost:9696/predict`:
+
+```bash
+curl -X POST http://localhost:9696/predict \
+-H "Content-Type: application/json" \
+-d '{
+  "city_mpg": 25,
+  "class": "midsize car",
+  "cylinders": 4.0,
+  "displacement": 2.5,
+  "drive": "fwd",
+  "fuel_type": "gas",
+  "highway_mpg": 36,
+  "make": "mazda",
+  "model": "6",
+  "transmission": "m",
+  "year": 2014
+}'
+```
+
+You will receive a response predicting the fuel efficiency of this car, like below:
+
+```json
+{
+  "RandomForest_Prediction": 28.71,
+  "SVR_Prediction": 29.057080495117557
+}
 ```
